@@ -24,15 +24,24 @@
 Đề tài này xây dựng một hệ thống đăng nhập hoạt động theo mô hình Client–Server, cho phép người dùng đăng ký, đăng nhập và quản lý tài khoản. Điểm nổi bật là hệ thống có phân quyền Admin với giao diện quản trị riêng để theo dõi và quản lý danh sách người dùng.
 Mục tiêu
 -Cung cấp một hệ thống đăng nhập an toàn, đơn giản, dễ mở rộng.
+
 -Quản lý người dùng tập trung thông qua server và tệp dữ liệu users.txt.
+
 -Phân quyền tài khoản:
+
     +User: chỉ đăng nhập và sử dụng ứng dụng.
+    
     +Admin: có quyền xem danh sách và xóa tài khoản.
+    
 ## 🔧 2. Công nghệ sử dụng
 -Ngôn ngữ: Java
+
 -Giao diện: Swing (JFrame, JTable)
+
 -Kết nối mạng: Socket TCP
+
 -Lưu trữ dữ liệu: File users.txt
+
 ## 🚀 3. Hình ảnh các chức năng
 
 ## 📝 4. Hướng dẫn cài đặt và sử dụng
