@@ -69,8 +69,6 @@ Admin: có quyền xem danh sách và xóa tài khoản.
 </p>
 ## 📝 4. Hướng dẫn cài đặt và sử dụng
 
-# Hướng dẫn tải và chạy dự án Hệ thống Đăng nhập Client–Server
-
 ## 1. Cài đặt môi trường
 
 Trước khi chạy dự án, cần chuẩn bị:
