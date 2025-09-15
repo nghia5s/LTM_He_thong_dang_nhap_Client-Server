@@ -136,3 +136,11 @@ Trước khi chạy dự án, cần chuẩn bị:
 ---
 
 Vậy là bạn đã tải và chạy thành công hệ thống đăng nhập Client–Server.
+
+
+## Thông tin cá nhân
+**Họ tên**: Trần Hiếu Nghĩa.  
+**Lớp**: CNTT 16-03.  
+**Email**: nt313201@gmail.com.
+
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
