@@ -44,4 +44,27 @@ Admin: có quyền xem danh sách và xóa tài khoản.
 
 ## 🚀 3. Hình ảnh các chức năng
 
+<p align="center">
+  <img src="docs/p (1).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (3).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (2).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (4).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (6).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (5).jpg" alt="Ảnh 1" width="800"/>
+</p>
 ## 📝 4. Hướng dẫn cài đặt và sử dụng
