@@ -93,7 +93,7 @@ Trước khi chạy dự án, cần chuẩn bị:
 2. Chạy lệnh sau để tải dự án:
 
    ```bash
-   git clone <link-github-repo>
+   git clone <https://github.com/nghia5s/LTM_He_thong_dang_nhap_Client-Server.git>
    ```
 3. Truy cập vào thư mục dự án:
 
