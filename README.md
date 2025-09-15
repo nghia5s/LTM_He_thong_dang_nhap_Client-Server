@@ -5,7 +5,7 @@
     </a>
 </h2>
 <h2 align="center">
-   XÂY DỰNG ỨNG DỤNG CHAT CLIENT-SERVER SỬ DỤNG GIAO THỨC TCP
+   HỆ THỐNG ĐĂNG NHẬP CLIENT-SERVER
 </h2>
 <div align="center">
     <p align="center">
