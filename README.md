@@ -29,9 +29,9 @@ Mục tiêu
 
 -Phân quyền tài khoản:
 
-     User: chỉ đăng nhập và sử dụng ứng dụng.
+User: chỉ đăng nhập và sử dụng ứng dụng.
     
-     Admin: có quyền xem danh sách và xóa tài khoản.
+Admin: có quyền xem danh sách và xóa tài khoản.
     
 ## 🔧 2. Công nghệ sử dụng
 -Ngôn ngữ: Java
