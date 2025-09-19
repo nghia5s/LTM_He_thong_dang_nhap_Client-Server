@@ -5,7 +5,7 @@
     </a>
 </h2>
 <h2 align="center">
-   XÂY DỰNG ỨNG DỤNG CHAT CLIENT-SERVER SỬ DỤNG GIAO THỨC TCP
+   HỆ THỐNG ĐĂNG NHẬP CLIENT-SERVER
 </h2>
 <div align="center">
     <p align="center">
@@ -44,4 +44,105 @@ Admin: có quyền xem danh sách và xóa tài khoản.
 
 ## 🚀 3. Hình ảnh các chức năng
 
+<p align="center">
+  <img src="docs/p (1).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (3).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (2).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (4).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (6).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <img src="docs/p (5).jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+
 ## 📝 4. Hướng dẫn cài đặt và sử dụng
+
+## 1. Cài đặt môi trường
+
+Trước khi chạy dự án, cần chuẩn bị:
+
+* **Java Development Kit (JDK)** 8 trở lên
+
+  * Tải tại: [https://adoptium.net/](https://adoptium.net/)
+  * Kiểm tra bằng lệnh: `java -version`
+* **Git** để tải mã nguồn từ GitHub
+
+  * Tải tại: [https://git-scm.com/](https://git-scm.com/)
+  * Kiểm tra bằng lệnh: `git --version`
+* IDE đề xuất: **IntelliJ IDEA** hoặc **Eclipse**
+
+---
+
+## 2. Tải dự án từ GitHub
+
+1. Mở terminal hoặc cmd.
+2. Chạy lệnh sau để tải dự án:
+
+   ```bash
+   git clone <https://github.com/nghia5s/LTM_He_thong_dang_nhap_Client-Server.git>
+   ```
+3. Truy cập vào thư mục dự án:
+
+   ```bash
+   cd <ten-thu-muc-du-an>
+   ```
+
+---
+
+## 3. Mở dự án trên IDE
+
+1. Mở IDE (IntelliJ hoặc Eclipse).
+2. Chọn **Open Project** và chọn thư mục vừa tải về.
+3. Đợi IDE load toàn bộ cấu trúc dự án.
+
+---
+
+## 4. Chạy Server
+
+1. Mở file `server.java` trong package `login`.
+2. Nhấn **Run** để chạy.
+3. Console sẽ hiện thông báo `Server đang chạy trên cổng 12345`.
+
+---
+
+## 5. Chạy Client
+
+1. Mở file `client.java` (hoặc file giao diện Client).
+2. Nhấn **Run** để khởi động giao diện đăng nhập.
+3. Đăng nhập bằng tài khoản:
+
+   * Admin mặc định: `admin` / `admin123`
+
+---
+
+## 6. Tính năng
+
+* Đăng nhập và đăng ký tài khoản mới.
+* Admin đăng nhập để xem danh sách user.
+* Admin có thể xóa tài khoản người dùng.
+
+---
+
+Vậy là bạn đã tải và chạy thành công hệ thống đăng nhập Client–Server.
+
+
+## Thông tin cá nhân
+**Họ tên**: Trần Hiếu Nghĩa.  
+**Lớp**: CNTT 16-03.  
+**Email**: nt313201@gmail.com.
+
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
