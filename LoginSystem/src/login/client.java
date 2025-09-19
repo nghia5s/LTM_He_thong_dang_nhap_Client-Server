@@ -16,10 +16,14 @@ public class client extends JFrame {
     private JTextField registerUsernameField;
     private JPasswordField registerPasswordField;
     private JPasswordField confirmPasswordField;
+    private JTextField fullnameField;
+    private JTextField dobField;   // 🔹 đổi từ ageField → dobField
+    private JTextField phoneField;
+    private JTextField emailField;
 
     public client() {
         setTitle("Login System");
-        setSize(400, 300);
+        setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -56,9 +60,7 @@ public class client extends JFrame {
         gbc.gridx = 1; gbc.gridy = 2;
         panel.add(loginBtn, gbc);
 
-        loginBtn.addActionListener(e -> sendRequest("LOGIN",
-                loginUsernameField.getText(),
-                new String(loginPasswordField.getPassword())));
+        loginBtn.addActionListener(e -> sendLoginRequest());
 
         return panel;
     }
@@ -93,8 +95,40 @@ public class client extends JFrame {
         gbc.gridx = 1; gbc.gridy = 2;
         panel.add(confirmPasswordField, gbc);
 
-        JButton registerBtn = createStyledButton("Register");
+        JLabel fullnameLabel = new JLabel("Full Name:");
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(fullnameLabel, gbc);
+
+        fullnameField = new JTextField();
         gbc.gridx = 1; gbc.gridy = 3;
+        panel.add(fullnameField, gbc);
+
+        JLabel dobLabel = new JLabel("Date of Birth (dd/MM/yyyy):");
+        gbc.gridx = 0; gbc.gridy = 4;
+        panel.add(dobLabel, gbc);
+
+        dobField = new JTextField();
+        gbc.gridx = 1; gbc.gridy = 4;
+        panel.add(dobField, gbc);
+
+        JLabel phoneLabel = new JLabel("Phone:");
+        gbc.gridx = 0; gbc.gridy = 5;
+        panel.add(phoneLabel, gbc);
+
+        phoneField = new JTextField();
+        gbc.gridx = 1; gbc.gridy = 5;
+        panel.add(phoneField, gbc);
+
+        JLabel emailLabel = new JLabel("Email:");
+        gbc.gridx = 0; gbc.gridy = 6;
+        panel.add(emailLabel, gbc);
+
+        emailField = new JTextField();
+        gbc.gridx = 1; gbc.gridy = 6;
+        panel.add(emailField, gbc);
+
+        JButton registerBtn = createStyledButton("Register");
+        gbc.gridx = 1; gbc.gridy = 7;
         panel.add(registerBtn, gbc);
 
         registerBtn.addActionListener(e -> handleRegister());
@@ -103,19 +137,50 @@ public class client extends JFrame {
     }
 
     private void handleRegister() {
-        String username = registerUsernameField.getText();
+        String username = registerUsernameField.getText().trim();
         String password = new String(registerPasswordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
+        String fullname = fullnameField.getText().trim();
+        String dob = dobField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String email = emailField.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
+                || fullname.isEmpty() || dob.isEmpty() || phone.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             return;
         }
+
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(this, "Mật khẩu xác nhận không khớp!");
             return;
         }
-        sendRequest("REGISTER", username, password);
+
+        // 🔹 Kiểm tra Fullname
+        if (!fullname.matches("^[A-ZÀ-Ỹ][a-zà-ỹA-ZÀ-Ỹ\\s]{0,29}$")) {
+            JOptionPane.showMessageDialog(this, "Họ tên phải viết hoa chữ cái đầu, có dấu, tối đa 30 ký tự!");
+            return;
+        }
+
+        // 🔹 Kiểm tra ngày sinh (định dạng dd/MM/yyyy)
+        if (!dob.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
+            JOptionPane.showMessageDialog(this, "Ngày sinh phải có dạng dd/MM/yyyy!");
+            return;
+        }
+
+        // 🔹 Kiểm tra số điện thoại
+        if (!phone.matches("\\d{1,10}")) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại chỉ được chứa tối đa 10 chữ số!");
+            return;
+        }
+
+        // 🔹 Kiểm tra email
+        if (!email.matches("^[\\w._%+-]+@gmail\\.com$")) {
+            JOptionPane.showMessageDialog(this, "Email phải có dạng example@gmail.com!");
+            return;
+        }
+
+        sendRegisterRequest(username, password, fullname, dob, phone, email);
     }
 
     private JButton createStyledButton(String text) {
@@ -137,7 +202,10 @@ public class client extends JFrame {
         return button;
     }
 
-    private void sendRequest(String action, String username, String password) {
+    private void sendLoginRequest() {
+        String username = loginUsernameField.getText();
+        String password = new String(loginPasswordField.getPassword());
+
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             return;
@@ -148,39 +216,60 @@ public class client extends JFrame {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
-            out.println(action + "|" + username + "|" + password);
+            out.println("LOGIN|" + username + "|" + password);
             String response = in.readLine();
 
             if ("SUCCESS:ADMIN".equalsIgnoreCase(response)) {
                 JOptionPane.showMessageDialog(this, "Admin đăng nhập thành công!");
                 showAdminDashboard();
             } else if ("SUCCESS".equalsIgnoreCase(response)) {
-                JOptionPane.showMessageDialog(this, action + " thành công!");
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
             } else {
-                JOptionPane.showMessageDialog(this, action + " thất bại!");
+                JOptionPane.showMessageDialog(this, "Đăng nhập thất bại!");
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Không thể kết nối đến server.");
         }
     }
 
-    // 🔥 Hiển thị danh sách user + Xóa User
+    private void sendRegisterRequest(String username, String password,
+                                     String fullname, String dob, String phone, String email) {
+        try (
+            Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            out.println("REGISTER|" + username + "|" + password + "|user|" + fullname + "|" + dob + "|" + phone + "|" + email);
+            String response = in.readLine();
+
+            if ("SUCCESS".equalsIgnoreCase(response)) {
+                JOptionPane.showMessageDialog(this, "Đăng ký thành công!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Đăng ký thất bại!");
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Không thể kết nối đến server.");
+        }
+    }
+
     private void showAdminDashboard() {
         JFrame adminFrame = new JFrame("Admin Dashboard");
-        adminFrame.setSize(500, 400);
+        adminFrame.setSize(800, 500);
         adminFrame.setLocationRelativeTo(null);
 
-        String[] columnNames = {"Username", "Password", "Role"};
+        String[] columnNames = {"Username", "Password", "Role", "Full Name", "Date of Birth", "Phone", "Email"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
 
         JButton refreshBtn = createStyledButton("Làm mới");
-        JButton deleteBtn = createStyledButton("Xóa User");
+        JButton deleteBtn = createStyledButton("Xóa người dùng");
+        JButton editBtn = createStyledButton("Sửa thông tin người dùng");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(refreshBtn);
         buttonPanel.add(deleteBtn);
+        buttonPanel.add(editBtn);
 
         adminFrame.setLayout(new BorderLayout());
         adminFrame.add(scrollPane, BorderLayout.CENTER);
@@ -190,7 +279,7 @@ public class client extends JFrame {
         deleteBtn.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(adminFrame, "Chọn user cần xóa!");
+                JOptionPane.showMessageDialog(adminFrame, "Chọn người dùng cần xóa!");
                 return;
             }
             String username = tableModel.getValueAt(selectedRow, 0).toString();
@@ -200,6 +289,30 @@ public class client extends JFrame {
             }
             deleteUser(username);
             loadUserList(tableModel);
+        });
+
+        editBtn.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(adminFrame, "Chọn người dùng cần sửa!");
+                return;
+            }
+            JTextField[] fields = new JTextField[7];
+            JPanel panel = new JPanel(new GridLayout(7, 2));
+            String[] labels = {"Username", "Password", "Role", "Full Name", "Date of Birth", "Phone", "Email"};
+            for (int i = 0; i < 7; i++) {
+                panel.add(new JLabel(labels[i] + ":"));
+                fields[i] = new JTextField(tableModel.getValueAt(selectedRow, i).toString());
+                panel.add(fields[i]);
+            }
+
+            int result = JOptionPane.showConfirmDialog(adminFrame, panel, "Sửa thông tin người dùng", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                updateUser(tableModel.getValueAt(selectedRow, 0).toString(),
+                        fields[0].getText(), fields[1].getText(), fields[2].getText(),
+                        fields[3].getText(), fields[4].getText(), fields[5].getText(), fields[6].getText());
+                loadUserList(tableModel);
+            }
         });
 
         loadUserList(tableModel);
@@ -218,11 +331,17 @@ public class client extends JFrame {
             if (!"SUCCESS:ADMIN".equalsIgnoreCase(response)) return;
 
             String line;
-            while (!(line = in.readLine()).equals("END")) {
+            while ((line = in.readLine()) != null) {
+                if (line.equals("USERLIST_START")) {
+                    continue;
+                }
+                if (line.equals("END")) {
+                    break;
+                }
                 tableModel.addRow(line.split(","));
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách user");
+            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách người dùng");
         }
     }
 
@@ -236,6 +355,21 @@ public class client extends JFrame {
             String response = in.readLine();
             JOptionPane.showMessageDialog(this, response.equals("DELETE_SUCCESS")
                     ? "Xóa thành công!" : "Xóa thất bại!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Không thể kết nối server!");
+        }
+    }
+
+    private void updateUser(String oldUsername, String newUsername, String newPassword, String newRole, String fullname, String dob, String phone, String email) {
+        try (
+            Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            out.println("UPDATE|" + oldUsername + "|" + newUsername + "|" + newPassword + "|" + newRole + "|" + fullname + "|" + dob + "|" + phone + "|" + email);
+            String response = in.readLine();
+            JOptionPane.showMessageDialog(this, response.equals("UPDATE_SUCCESS")
+                    ? "Sửa thông tin thành công!" : "Sửa thông tin thất bại!");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Không thể kết nối server!");
         }
