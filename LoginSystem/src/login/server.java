@@ -171,6 +171,11 @@ public class server {
                                         ? "UPDATE_SUCCESS" : "UPDATE_FAIL");
                             break;
                         }
+                        case "GET_ALL_USERS": {
+                            sendUserList(out);
+                            break;
+                        }
+
                         default:
                             out.println("UNKNOWN_COMMAND");
                     }

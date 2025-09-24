@@ -17,7 +17,7 @@ public class client extends JFrame {
     private JPasswordField registerPasswordField;
     private JPasswordField confirmPasswordField;
     private JTextField fullnameField;
-    private JTextField dobField;   // 🔹 đổi từ ageField → dobField
+    private JTextField dobField;
     private JTextField phoneField;
     private JTextField emailField;
 
@@ -156,30 +156,6 @@ public class client extends JFrame {
             return;
         }
 
-        // 🔹 Kiểm tra Fullname
-        if (!fullname.matches("^[A-ZÀ-Ỹ][a-zà-ỹA-ZÀ-Ỹ\\s]{0,29}$")) {
-            JOptionPane.showMessageDialog(this, "Họ tên phải viết hoa chữ cái đầu, có dấu, tối đa 30 ký tự!");
-            return;
-        }
-
-        // 🔹 Kiểm tra ngày sinh (định dạng dd/MM/yyyy)
-        if (!dob.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
-            JOptionPane.showMessageDialog(this, "Ngày sinh phải có dạng dd/MM/yyyy!");
-            return;
-        }
-
-        // 🔹 Kiểm tra số điện thoại
-        if (!phone.matches("\\d{1,10}")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại chỉ được chứa tối đa 10 chữ số!");
-            return;
-        }
-
-        // 🔹 Kiểm tra email
-        if (!email.matches("^[\\w._%+-]+@gmail\\.com$")) {
-            JOptionPane.showMessageDialog(this, "Email phải có dạng example@gmail.com!");
-            return;
-        }
-
         sendRegisterRequest(username, password, fullname, dob, phone, email);
     }
 
@@ -254,7 +230,7 @@ public class client extends JFrame {
 
     private void showAdminDashboard() {
         JFrame adminFrame = new JFrame("Admin Dashboard");
-        adminFrame.setSize(800, 500);
+        adminFrame.setSize(900, 500);
         adminFrame.setLocationRelativeTo(null);
 
         String[] columnNames = {"Username", "Password", "Role", "Full Name", "Date of Birth", "Phone", "Email"};
@@ -262,20 +238,52 @@ public class client extends JFrame {
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
 
+        // ===== Các nút chức năng =====
+        JButton addBtn = createStyledButton("Thêm người dùng");
         JButton refreshBtn = createStyledButton("Làm mới");
         JButton deleteBtn = createStyledButton("Xóa người dùng");
-        JButton editBtn = createStyledButton("Sửa thông tin người dùng");
+        JButton editBtn = createStyledButton("Sửa thông tin");
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(refreshBtn);
-        buttonPanel.add(deleteBtn);
-        buttonPanel.add(editBtn);
+        // ===== Ô tìm kiếm =====
+        JTextField searchField = new JTextField(15);
+        JButton searchBtn = createStyledButton("Tìm kiếm");
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("Tìm kiếm:"));
+        topPanel.add(searchField);
+        topPanel.add(searchBtn);
+        topPanel.add(addBtn);
+        topPanel.add(refreshBtn);
+        topPanel.add(deleteBtn);
+        topPanel.add(editBtn);
 
         adminFrame.setLayout(new BorderLayout());
+        adminFrame.add(topPanel, BorderLayout.NORTH);
         adminFrame.add(scrollPane, BorderLayout.CENTER);
-        adminFrame.add(buttonPanel, BorderLayout.SOUTH);
 
+        // ===== Chức năng =====
         refreshBtn.addActionListener(e -> loadUserList(tableModel));
+
+        addBtn.addActionListener(e -> {
+            JTextField[] fields = new JTextField[7];
+            JPanel panel = new JPanel(new GridLayout(7, 2));
+            String[] labels = {"Username", "Password", "Role", "Full Name", "Date of Birth", "Phone", "Email"};
+            for (int i = 0; i < 7; i++) {
+                panel.add(new JLabel(labels[i] + ":"));
+                fields[i] = new JTextField();
+                panel.add(fields[i]);
+            }
+
+            int result = JOptionPane.showConfirmDialog(adminFrame, panel,
+                    "Thêm người dùng mới", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                addUser(fields[0].getText(), fields[1].getText(), fields[2].getText(),
+                        fields[3].getText(), fields[4].getText(), fields[5].getText(), fields[6].getText());
+                loadUserList(tableModel);
+            }
+        });
+
         deleteBtn.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -306,7 +314,9 @@ public class client extends JFrame {
                 panel.add(fields[i]);
             }
 
-            int result = JOptionPane.showConfirmDialog(adminFrame, panel, "Sửa thông tin người dùng", JOptionPane.OK_CANCEL_OPTION);
+            int result = JOptionPane.showConfirmDialog(adminFrame, panel,
+                    "Sửa thông tin người dùng", JOptionPane.OK_CANCEL_OPTION);
+
             if (result == JOptionPane.OK_OPTION) {
                 updateUser(tableModel.getValueAt(selectedRow, 0).toString(),
                         fields[0].getText(), fields[1].getText(), fields[2].getText(),
@@ -315,9 +325,33 @@ public class client extends JFrame {
             }
         });
 
+        // ===== Tìm kiếm =====
+        searchBtn.addActionListener(e -> {
+            String keyword = searchField.getText().trim().toLowerCase();
+            if (keyword.isEmpty()) {
+                loadUserList(tableModel);
+                return;
+            }
+            for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
+                boolean match = false;
+                for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                    String cellValue = tableModel.getValueAt(i, j).toString().toLowerCase();
+                    if (cellValue.contains(keyword)) {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match) {
+                    tableModel.removeRow(i);
+                }
+            }
+        });
+
         loadUserList(tableModel);
         adminFrame.setVisible(true);
     }
+
+
 
     private void loadUserList(DefaultTableModel tableModel) {
         tableModel.setRowCount(0);
@@ -326,22 +360,30 @@ public class client extends JFrame {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
-            out.println("LOGIN|admin|admin123");
-            String response = in.readLine();
-            if (!"SUCCESS:ADMIN".equalsIgnoreCase(response)) return;
-
+            out.println("GET_ALL_USERS");
             String line;
             while ((line = in.readLine()) != null) {
-                if (line.equals("USERLIST_START")) {
-                    continue;
-                }
-                if (line.equals("END")) {
-                    break;
-                }
+                if (line.equals("USERLIST_START")) continue;
+                if (line.equals("END")) break;
                 tableModel.addRow(line.split(","));
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi tải danh sách người dùng");
+        }
+    }
+
+    private void addUser(String username, String password, String role, String fullname, String dob, String phone, String email) {
+        try (
+            Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            out.println("REGISTER|" + username + "|" + password + "|" + role + "|" + fullname + "|" + dob + "|" + phone + "|" + email);
+            String response = in.readLine();
+            JOptionPane.showMessageDialog(this, response.equals("SUCCESS")
+                    ? "Thêm người dùng thành công!" : "Thêm người dùng thất bại!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Không thể kết nối server!");
         }
     }
 
