@@ -21,51 +21,112 @@
 </div>
 
 ## 📖 1. Giới thiệu hệ thống
-Đề tài này xây dựng một hệ thống đăng nhập hoạt động theo mô hình Client–Server, cho phép người dùng đăng ký, đăng nhập và quản lý tài khoản. Điểm nổi bật là hệ thống có phân quyền Admin với giao diện quản trị riêng để theo dõi và quản lý danh sách người dùng.
-Mục tiêu
--Cung cấp một hệ thống đăng nhập an toàn, đơn giản, dễ mở rộng.
 
--Quản lý người dùng tập trung thông qua server và tệp dữ liệu users.txt.
+Đây là một **hệ thống đăng nhập Client – Server** viết bằng **Java + SQLite**, hỗ trợ cả **người dùng thường (User)** và **quản trị viên (Admin)**.
+Mục tiêu: xây dựng ứng dụng mô phỏng việc đăng ký, đăng nhập, quản lý tài khoản người dùng với giao diện trực quan (Swing).
 
--Phân quyền tài khoản:
+---
 
-User: chỉ đăng nhập và sử dụng ứng dụng.
-    
-Admin: có quyền xem danh sách và xóa tài khoản.
-    
+## ⚙️ Các chức năng chính
+
+### - Đăng nhập
+
+* Người dùng nhập tên đăng nhập & mật khẩu.
+* Server kiểm tra thông tin trong cơ sở dữ liệu (SQLite).
+* Nếu hợp lệ → trả về role (`ADMIN` hoặc `USER`).
+
+### - Đăng ký tài khoản (Register)
+
+* Cho phép thêm người dùng mới vào database.
+* Các trường thông tin: `username, password, role, fullname, dob, phone, email`.
+
+### - Màn hình sau đăng nhập
+
+* **User** → vào màn hình chung đơn giản (hiện lời chào, nút đăng xuất).
+* **Admin** → chuyển sang **Admin Dashboard**.
+
+### - Admin Dashboard
+
+* Xem danh sách tất cả user (hiển thị bằng `JTable`).
+* Chức năng quản lý:
+
+  * ➕ **Thêm người dùng** (qua form nhập dữ liệu).
+  * ✏️ **Cập nhật người dùng**.
+  * 🗑️ **Xóa người dùng**.
+  * 🔍 **Tìm kiếm người dùng** theo `username`.
+* Các nút thao tác bố trí phía trên bảng, dễ sử dụng.
+
+### - Đồng bộ Client – Server
+
+* Client gửi lệnh qua socket (`LOGIN|...`, `REGISTER|...`, `GET_ALL_USERS`, …).
+* Server xử lý và trả kết quả → Client cập nhật giao diện.
+
+### - Cơ sở dữ liệu SQLite
+
+* Bảng `users` lưu trữ toàn bộ thông tin.
+* DB có thể mở trực tiếp bằng **DB Browser for SQLite** để kiểm tra dữ liệu.
+
 ## 🔧 2. Công nghệ sử dụng
--Ngôn ngữ: Java
+- **Ngôn ngữ lập trình:**
 
--Giao diện: Swing (JFrame, JTable)
+   * **Java** (JDK 8+), làm nền tảng chính để xây dựng cả **Client** và **Server**.
+   * Ưu điểm: đa nền tảng, dễ dàng kết nối với cơ sở dữ liệu, hỗ trợ mạnh về socket và giao diện.
 
--Kết nối mạng: Socket TCP
+- **Giao tiếp Client – Server:**
 
--Lưu trữ dữ liệu: File users.txt
+   * **Java Socket Programming** (`ServerSocket`, `Socket`, `InputStream`, `OutputStream`).
+   * Mỗi yêu cầu từ client được server xử lý theo giao thức tự định nghĩa (ví dụ: `LOGIN|username|password`).
+
+- **Cơ sở dữ liệu:**
+
+   * **SQLite** – CSDL nhẹ, nhúng trực tiếp vào ứng dụng.
+   * Truy vấn dữ liệu bằng **JDBC** (`java.sql.Connection`, `PreparedStatement`, `ResultSet`).
+
+- **Giao diện đồ họa:**
+
+   * **Java Swing** (`JFrame`, `JPanel`, `JTable`, `JButton`, `JTextField`, `JPasswordField`).
+   * Dùng để xây dựng:
+
+     * Form đăng nhập/đăng ký.
+     * Admin Dashboard (hiện bảng người dùng, CRUD, tìm kiếm).
+     * Màn hình User sau đăng nhập.
+
+- **Công cụ hỗ trợ:**
+
+   * **DB Browser for SQLite**: kiểm tra, chỉnh sửa và xem dữ liệu trực quan.
+   * **Eclipse/IntelliJ IDEA/NetBeans**: IDE để phát triển và chạy project.
+
 
 ## 🚀 3. Hình ảnh các chức năng
 
 <p align="center">
-  <img src="docs/p (1).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Giao diện đăng nhập </figcaption>
+  <img src="docs/p1.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/p (3).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Giao diện đăng ký dàng cho người dùng </figcaption>
+  <img src="docs/p2.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/p (2).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Giao diện quản lý người dùng của admin </figcaption>
+  <img src="docs/p3.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/p (4).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Giao diện sửa thông tin người dùng </figcaption>
+  <img src="docs/p4.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/p (6).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Giao diện thêm người dùng trực tiếp của admin </figcaption>
+  <img src="docs/p5.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/p (5).jpg" alt="Ảnh 1" width="800"/>
+  <figcaption> Database người dùng </figcaption>
+  <img src="docs/p6.jpg" alt="Ảnh 1" width="800"/>
 </p>
 
 
