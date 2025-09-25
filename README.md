@@ -144,8 +144,6 @@ Trước khi chạy dự án, cần chuẩn bị:
   * Kiểm tra bằng lệnh: `git --version`
 * IDE đề xuất: **IntelliJ IDEA** hoặc **Eclipse**
 
----
-
 ## 2. Tải dự án từ GitHub
 
 1. Mở terminal hoặc cmd.
@@ -160,23 +158,17 @@ Trước khi chạy dự án, cần chuẩn bị:
    cd <ten-thu-muc-du-an>
    ```
 
----
-
 ## 3. Mở dự án trên IDE
 
 1. Mở IDE (IntelliJ hoặc Eclipse).
 2. Chọn **Open Project** và chọn thư mục vừa tải về.
 3. Đợi IDE load toàn bộ cấu trúc dự án.
 
----
-
 ## 4. Chạy Server
 
 1. Mở file `server.java` trong package `login`.
 2. Nhấn **Run** để chạy.
 3. Console sẽ hiện thông báo `Server đang chạy trên cổng 12345`.
-
----
 
 ## 5. Chạy Client
 
@@ -186,15 +178,11 @@ Trước khi chạy dự án, cần chuẩn bị:
 
    * Admin mặc định: `admin` / `admin123`
 
----
-
 ## 6. Tính năng
 
 * Đăng nhập và đăng ký tài khoản mới.
 * Admin đăng nhập để xem danh sách user.
 * Admin có thể xóa tài khoản người dùng.
-
----
 
 Vậy là bạn đã tải và chạy thành công hệ thống đăng nhập Client–Server.
 
