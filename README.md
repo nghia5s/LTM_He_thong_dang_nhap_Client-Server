@@ -25,8 +25,6 @@
 Đây là một hệ thống đăng nhập Client – Server viết bằng Java + SQLite, hỗ trợ cả người dùng thường (User) và quản trị viên (Admin).
 Mục tiêu: xây dựng ứng dụng mô phỏng việc đăng ký, đăng nhập, quản lý tài khoản người dùng với giao diện trực quan (Swing).
 
----
-
 ## ⚙️ Các chức năng chính
 
 ### - Đăng nhập
